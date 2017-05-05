@@ -14,7 +14,7 @@ public class Game
     		players.add(new Player());
     }
     
-    private void setNames(ArrayList names)
+    private void setNames(List<String> names)
     {
     	for (Player p : players)
     	{
@@ -39,7 +39,7 @@ public class Game
         //END
     }
     
-    public ArrayList<Player> updatePlayers()
+    public List<Player> updatePlayers()
     {
     	return players;
     }
