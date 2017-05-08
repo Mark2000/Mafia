@@ -4,4 +4,5 @@ public class Detective extends Player
     {
         return "detective";
     }
+    //goodbye comuptur
 }
