@@ -24,20 +24,7 @@ public class Game
     	}
     }
     
-    
-    
-    public void Main()
-    {
-        //SETUP2
-        //get names
-        //assign roles
-        //show roles
-        //intro
-        //MAIN LOOP
-        //night
-        //day
-        //END
-    }
+
     
     public List<Player> updatePlayers()
     {
