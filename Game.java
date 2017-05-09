@@ -24,8 +24,6 @@ public class Game
     	}
     }
     
-
-    
     public List<Player> updatePlayers()
     {
     	return players;
