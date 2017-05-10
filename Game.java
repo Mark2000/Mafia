@@ -10,8 +10,9 @@ public class Game
     	players.add(new Medic());
     	for (int k = 0; k < Math.round((double)n / 3); k++)
     		players.add(new Mafia());
-    	for (int k = 0; k < Math.round((double)2 * n / 3); k++)
+    	for (int k = 0; k < Math.round((double)2 * n / 3 - 2); k++)
     		players.add(new Player());
+    	Collections.shuffle(players);
     }
     
     private void setNames(List<String> names)
@@ -24,7 +25,7 @@ public class Game
     	}
     }
     
-    public List<Player> updatePlayers()
+    public List<Player> getPlayers()
     {
     	return players;
     }
