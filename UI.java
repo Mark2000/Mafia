@@ -63,6 +63,7 @@ public class UI extends JFrame
 		
 		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
 		peopleGrid.setBorder(new EmptyBorder(0, 20, 20, 20));
+		
 		JPanel text = new JPanel(new BorderLayout());
 		text.setBorder(new EmptyBorder(20, 20, 20, 20));
 		
@@ -104,18 +105,92 @@ public class UI extends JFrame
 			}
 			else
 			{
-				peopleGrid.add(new JButton(p.getName()));
+				JButton playerButton = new JButton(p.getName());
+				playerButton.setEnabled(false);
+				peopleGrid.add(playerButton);
 			}
 		}
+		
 
+		//text and start button
 		text.add(new JTextArea("Set the player names."));
 		
+		JButton startGame = new JButton("Start Game");
+		startGame.setHorizontalAlignment(JTextField.CENTER);
+		text.add(startGame, BorderLayout.SOUTH);
+		
+		startGame.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				boolean allSet = true;
+				for (Player p : g.getPlayers())
+				{
+					allSet = allSet && p.getName() != null;
+				}
+				if (allSet) gameLoop();
+				setVisible(true);
+			}
+		});
+		
+		//display
 		add(text);
 		add(peopleGrid);
 		
 		setVisible(true);
+	}
+	
+	public void readNames()
+	{
+		//setup
+		getContentPane().removeAll();
 		
-		//check to exit loop
+		setLayout(new GridLayout(2,1));
+		
+		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
+		peopleGrid.setBorder(new EmptyBorder(0, 20, 20, 20));
+		JPanel text = new JPanel(new BorderLayout());
+		text.setBorder(new EmptyBorder(20, 20, 20, 20));
+		
+		//display
+		add(text);
+		add(peopleGrid);
+		
+		setVisible(true);
+	}
+	
+	public void gameLoop()
+	{
+		getContentPane().removeAll();
+		
+		setLayout(new GridLayout(2,1));
+		
+		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
+		generateNameGrid(peopleGrid);
+		
+		JPanel text = new JPanel(new BorderLayout());
+		text.setBorder(new EmptyBorder(20, 20, 20, 20));
+		
+		//display
+		add(text);
+		add(peopleGrid);
+				
+		setVisible(true);
+	}
+	
+	public void generateNameGrid(JPanel peopleGrid)
+	{
+		peopleGrid.setBorder(new EmptyBorder(0, 20, 20, 20));
+		for (Player p : g.getPlayers())
+		{
+			JButton playerButton = new JButton(p.getName());
+			if (p.getDead())
+			{
+				playerButton.setEnabled(false);
+				playerButton.setName(p.getName() + "\n Dead");
+			}
+			peopleGrid.add(playerButton);
+		}
 	}
 	
 	public static void main(String[] args)
