@@ -3,8 +3,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import java.util.concurrent.*;
-
 public class UI extends JFrame
 {
 	Game g;
@@ -20,19 +18,17 @@ public class UI extends JFrame
 	{
 		//setup
 		getContentPane().removeAll();
-		
+				
 		setLayout(new GridLayout(2,1));
 		
 		//title
-		JPanel title = new JPanel();
-		JTextArea titleText = new JTextArea("MAFIA", 1,5);//Stylize
-		titleText.setEditable(false);
-		title.add(titleText, BorderLayout.CENTER);
+		JLabel titleText = new JLabel("MAFIA");
+		titleText.setHorizontalAlignment(JTextField.CENTER);
+		titleText.setFont(new Font("Serif", Font.BOLD, 70));
 		
 		//button
 		JPanel button = new JPanel();
 		JButton startButton = new JButton("New Game");
-		titleText.setEditable(false);
 		
 		//numbers
 		SpinnerModel playerModel = new SpinnerNumberModel(5,5,20,1);
@@ -52,34 +48,74 @@ public class UI extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				g = new Game((int)playerNumber.getValue());
-				gameScreen();
+				nameSetup();
 				setVisible(true);
 			}
 		});
 	}
 	
-	private void gameScreen()
+	private void nameSetup()
 	{
+		//setup
 		getContentPane().removeAll();
 		
 		setLayout(new GridLayout(2,1));
 		
-		JPanel people = new JPanel(new GridLayout(0,4,5,5));
-		people.setBorder(new EmptyBorder(0, 20, 20, 20));
+		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
+		peopleGrid.setBorder(new EmptyBorder(0, 20, 20, 20));
 		JPanel text = new JPanel(new BorderLayout());
 		text.setBorder(new EmptyBorder(20, 20, 20, 20));
 		
+		//set names
 		for (Player p:g.getPlayers())
 		{
-			people.add(new JButton(p.getRole()));
+			if (p.getName() == null)
+			{
+				JPanel personSlot = new JPanel(new GridLayout(2,1));
+				JTextField nameInput = new JTextField();
+				nameInput.setHorizontalAlignment(JTextField.CENTER); 
+				personSlot.add(nameInput);
+				JButton nameSet = new JButton("Add Player");
+				personSlot.add(nameSet);
+				peopleGrid.add(personSlot);
+				
+				nameSet.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						//Check name for valid
+						String name = nameInput.getText();
+						if (!name.matches("[a-zA-Z ]+"))//make more betterer
+						{
+							nameInput.setText("Blank or invalid character");
+						}
+						else if(g.getNames().indexOf(name) != -1)
+						{
+							nameInput.setText("Name already taken");
+						}
+						else
+						{
+							p.setName(name);
+							nameSetup();
+						}
+					}
+				
+				});
+			}
+			else
+			{
+				peopleGrid.add(new JButton(p.getName()));
+			}
 		}
-		
-		text.add(new JTextArea("This is sample text for the game of mafia. This is sample text for the game of mafia. This is sample text for the game of mafia. \n\n This is sample text for the game of mafia."));
+
+		text.add(new JTextArea("Set the player names."));
 		
 		add(text);
-		add(people);
+		add(peopleGrid);
 		
 		setVisible(true);
+		
+		//check to exit loop
 	}
 	
 	public static void main(String[] args)

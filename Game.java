@@ -15,14 +15,14 @@ public class Game
     	Collections.shuffle(players);
     }
     
-    private void setNames(List<String> names)
+    public List<String> getNames()
     {
+    	List<String> names = new ArrayList<String>();
     	for (Player p : players)
     	{
-    		int nameIndex = (int)(names.size() * Math.random());
-    		p.setName(names.get(nameIndex));
-    		names.remove(nameIndex);
+    		names.add(p.getName());
     	}
+    	return names;
     }
     
     public List<Player> getPlayers()

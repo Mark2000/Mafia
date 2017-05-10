@@ -7,6 +7,10 @@ public class Player
     {
         name = n;
     }
+    public String getName()
+    {
+    	return name;
+    }
     public String getRole()
     {
         return "civilian";
