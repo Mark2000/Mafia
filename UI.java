@@ -166,16 +166,32 @@ public class UI extends JFrame
 		setLayout(new GridLayout(2,1));
 		
 		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
-		generateNameGrid(peopleGrid);
 		
 		JPanel text = new JPanel(new BorderLayout());
 		text.setBorder(new EmptyBorder(20, 20, 20, 20));
 		
+		generateNameGrid(peopleGrid);
+	
 		//display
 		add(text);
 		add(peopleGrid);
-				
+			
 		setVisible(true);
+	}
+	
+	public void mafiaTurn()
+	{
+		//call to rise
+	}
+	
+	public void medicTurn()
+	{
+		
+	}
+	
+	public void detectiveTurn()
+	{
+		
 	}
 	
 	public void generateNameGrid(JPanel peopleGrid)
@@ -184,6 +200,16 @@ public class UI extends JFrame
 		for (Player p : g.getPlayers())
 		{
 			JButton playerButton = new JButton(p.getName());
+			
+			playerButton.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					System.out.println(p.getName() + " is a " + p.getRole());
+				}
+			
+			});
+			
 			if (p.getDead())
 			{
 				playerButton.setEnabled(false);

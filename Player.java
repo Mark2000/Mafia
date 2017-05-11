@@ -2,6 +2,7 @@ public class Player
 {
     private String name;
     private boolean isDead = false;
+    private boolean killed = false;
 
     public void setName(String n)
     {
@@ -17,11 +18,25 @@ public class Player
     }
     public void kill()
     {
-        isDead = true;
+        killed = true;
+    }
+    
+    public void revive()
+    {
+    	killed = false;
+    }
+    
+    public void makeDead()
+    {
+    	if (killed) isDead = true; 
     }
     
     public boolean getDead()
     {
     	return isDead;
+    }
+    
+    public void investigate()
+    {
     }
 }
