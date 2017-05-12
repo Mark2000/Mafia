@@ -9,6 +9,7 @@ public class UI extends JFrame
 	public UI()
 	{
 		super("Mafia");
+		getContentPane().setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800,600);
 		startScreen();
@@ -19,10 +20,11 @@ public class UI extends JFrame
 		//setup
 		getContentPane().removeAll();
 				
-		setLayout(new GridLayout(2,1));
+		getContentPane().setLayout(new GridLayout(2,1));
 		
 		//title
 		JLabel titleText = new JLabel("MAFIA");
+		titleText.setBackground(Color.BLACK);
 		titleText.setHorizontalAlignment(JTextField.CENTER);
 		titleText.setFont(new Font("Serif", Font.BOLD, 70));
 		
@@ -38,8 +40,8 @@ public class UI extends JFrame
 		button.add(playerNumber,BorderLayout.CENTER);
 		button.add(startButton,BorderLayout.CENTER);
 		
-		add(titleText);
-		add(button);
+		getContentPane().add(titleText);
+		getContentPane().add(button);
 		setVisible(true);
 		
 		//leave
@@ -59,7 +61,7 @@ public class UI extends JFrame
 		//setup
 		getContentPane().removeAll();
 		
-		setLayout(new GridLayout(2,1));
+		getContentPane().setLayout(new GridLayout(2,1));
 		
 		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
 		peopleGrid.setBorder(new EmptyBorder(0, 20, 20, 20));
@@ -134,8 +136,8 @@ public class UI extends JFrame
 		});
 		
 		//display
-		add(text);
-		add(peopleGrid);
+		getContentPane().add(text);
+		getContentPane().add(peopleGrid);
 		
 		setVisible(true);
 	}
@@ -145,7 +147,7 @@ public class UI extends JFrame
 		//setup
 		getContentPane().removeAll();
 		
-		setLayout(new GridLayout(2,1));
+		getContentPane().setLayout(new GridLayout(2,1));
 		
 		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
 		peopleGrid.setBorder(new EmptyBorder(0, 20, 20, 20));
@@ -153,8 +155,8 @@ public class UI extends JFrame
 		text.setBorder(new EmptyBorder(20, 20, 20, 20));
 		
 		//display
-		add(text);
-		add(peopleGrid);
+		getContentPane().add(text);
+		getContentPane().add(peopleGrid);
 		
 		setVisible(true);
 	}
@@ -163,7 +165,7 @@ public class UI extends JFrame
 	{
 		getContentPane().removeAll();
 		
-		setLayout(new GridLayout(2,1));
+		getContentPane().setLayout(new GridLayout(2,1));
 		
 		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
 		
@@ -173,8 +175,8 @@ public class UI extends JFrame
 		generateNameGrid(peopleGrid);
 	
 		//display
-		add(text);
-		add(peopleGrid);
+		getContentPane().add(text);
+		getContentPane().add(peopleGrid);
 			
 		setVisible(true);
 	}
@@ -224,14 +226,4 @@ public class UI extends JFrame
 		new UI();
     }
 	
-	//SETUP
-    //get names
-    //assign roles
-    //show roles
-    //intro
-    //MAIN LOOP
-    //night
-    //day
-    //END
-
 }
