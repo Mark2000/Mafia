@@ -3,9 +3,12 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import net.miginfocom.swing.MigLayout;
+
 public class UI extends JFrame
 {
 	Game g;
+	boolean continueGame = false;
 	public UI()
 	{
 		super("Mafia");
@@ -13,35 +16,33 @@ public class UI extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800,600);
 		startScreen();
+		nameSetup();
 	}
 	
 	private void startScreen()
 	{
-		//setup
-		getContentPane().removeAll();
-				
-		getContentPane().setLayout(new GridLayout(2,1));
+		//setup				
+		getContentPane().setBackground(Color.BLACK);
+		setResizable(false);
+		setSize(800,600);
+		setTitle("MAFIA");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new MigLayout("", "[40%,grow][30%:n,center][40%]", "[110.00][20%,top][20%][grow]"));
 		
-		//title
-		JLabel titleText = new JLabel("MAFIA");
-		titleText.setBackground(Color.BLACK);
-		titleText.setHorizontalAlignment(JTextField.CENTER);
-		titleText.setFont(new Font("Serif", Font.BOLD, 70));
+		JLabel title = new JLabel("Mafia");
+		title.setForeground(new Color(178, 34, 34));
+		title.setFont(new Font("Bodoni 72 Smallcaps", Font.PLAIN, 70));
+		getContentPane().add(title, "cell 1 1,alignx center,aligny bottom");
 		
-		//button
-		JPanel button = new JPanel();
-		JButton startButton = new JButton("New Game");
+		SpinnerModel numPlayersModel = new SpinnerNumberModel(5,5,20,1);
+		JSpinner numPlayers = new JSpinner(numPlayersModel);
+		numPlayers.setFont(new Font("Bodoni 72", Font.PLAIN, 16));
+		getContentPane().add(numPlayers, "flowx,cell 1 2,alignx center");
 		
-		//numbers
-		SpinnerModel playerModel = new SpinnerNumberModel(5,5,20,1);
-		JSpinner playerNumber = new JSpinner(playerModel);
-		//playerNumber.setColumns(2);
-		
-		button.add(playerNumber,BorderLayout.CENTER);
-		button.add(startButton,BorderLayout.CENTER);
-		
-		getContentPane().add(titleText);
-		getContentPane().add(button);
+		JButton startButton = new JButton("Start Game");
+		startButton.setFont(new Font("Bodoni 72 Smallcaps", Font.PLAIN, 16));
+		getContentPane().add(startButton, "cell 1 2,alignx center");
+
 		setVisible(true);
 		
 		//leave
@@ -49,38 +50,66 @@ public class UI extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				g = new Game((int)playerNumber.getValue());
-				nameSetup();
+				g = new Game((int)numPlayers.getValue());
 				setVisible(true);
 			}
 		});
+		while (true)
+		{
+			System.out.println("looping . . .");
+			if (g != null){
+				return;
+			}
+		}
 	}
+	
+	public boolean continueLoop;
 	
 	private void nameSetup()
 	{
 		//setup
+		continueLoop = false;
+		continueGame = false;
 		getContentPane().removeAll();
 		
-		getContentPane().setLayout(new GridLayout(2,1));
+		getContentPane().setLayout(new GridLayout(2, 1, 0, 0));
+		
+		JPanel top = new JPanel(new BorderLayout());
+		top.setBorder(new EmptyBorder(0, 20, 20, 20));
+		JLabel displayText = new JLabel("Select player names.");
+		displayText.setHorizontalAlignment(SwingConstants.CENTER);
+		displayText.setFont(new Font("Bodoni 72", Font.PLAIN, 24));
+		JButton startGame = new JButton("Continue");
+		startGame.setEnabled(true);
+		startGame.setFont(new Font("Bodoni 72", Font.PLAIN, 20));
+		startGame.setBackground(new Color(0, 0, 0));
+		top.add(startGame, BorderLayout.SOUTH);
+		top.add(displayText);
+		setResizable(false);
+		setSize(800,600);
+		setTitle("MAFIA");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		
 		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
 		peopleGrid.setBorder(new EmptyBorder(0, 20, 20, 20));
-		
-		JPanel text = new JPanel(new BorderLayout());
-		text.setBorder(new EmptyBorder(20, 20, 20, 20));
-		
-		//set names
+	
 		for (Player p:g.getPlayers())
 		{
 			if (p.getName() == null)
 			{
+				startGame.setEnabled(false);
+				
 				JPanel personSlot = new JPanel(new GridLayout(2,1));
 				JTextField nameInput = new JTextField();
-				nameInput.setHorizontalAlignment(JTextField.CENTER); 
+				nameInput.setHorizontalAlignment(JTextField.CENTER);
+				nameInput.setFont(new Font("Bodoni 72", Font.PLAIN, 14));
 				personSlot.add(nameInput);
 				JButton nameSet = new JButton("Add Player");
+				nameSet.setFont(new Font("Bodoni 72 Smallcaps", Font.PLAIN, 14));
 				personSlot.add(nameSet);
 				peopleGrid.add(personSlot);
+				setVisible(true);
 				
 				nameSet.addActionListener(new ActionListener()
 				{
@@ -108,59 +137,105 @@ public class UI extends JFrame
 			else
 			{
 				JButton playerButton = new JButton(p.getName());
+				playerButton.setFont(new Font("Bodoni 72", Font.PLAIN, 14));
 				playerButton.setEnabled(false);
 				peopleGrid.add(playerButton);
 			}
 		}
 		
+		//display
+		getContentPane().add(top);
+		getContentPane().add(peopleGrid);
+		
+		setVisible(true);
+		
 
-		//text and start button
-		text.add(new JTextArea("Set the player names."));
-		
-		JButton startGame = new JButton("Start Game");
-		startGame.setHorizontalAlignment(JTextField.CENTER);
-		text.add(startGame, BorderLayout.SOUTH);
-		
+		//start button
 		startGame.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				boolean allSet = true;
-				for (Player p : g.getPlayers())
-				{
-					allSet = allSet && p.getName() != null;
-				}
-				if (allSet) gameLoop();
+				if (g.namesSet()) continueGame = true;
 				setVisible(true);
+				gameLoop();
 			}
 		});
-		
-		//display
-		getContentPane().add(text);
-		getContentPane().add(peopleGrid);
-		
-		setVisible(true);
 	}
+	/*
+	private String showText;
+	private String readText;
 	
 	public void readNames()
 	{
 		//setup
+		continueGame = false;
+
 		getContentPane().removeAll();
+				
+		JPanel top = new JPanel(new BorderLayout());
+		JLabel textDisplay = new JLabel("firsttext");
+		textDisplay.setHorizontalAlignment(SwingConstants.CENTER);
+		textDisplay.setFont(new Font("Bodoni 72", Font.PLAIN, 24));
+		textDisplay.setBorder(new EmptyBorder(0, 20, 20, 20));
+		top.add(textDisplay, BorderLayout.CENTER);
 		
-		getContentPane().setLayout(new GridLayout(2,1));
+		setResizable(false);
+		setSize(800,600);
+		setTitle("MAFIA");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
 		peopleGrid.setBorder(new EmptyBorder(0, 20, 20, 20));
-		JPanel text = new JPanel(new BorderLayout());
-		text.setBorder(new EmptyBorder(20, 20, 20, 20));
+		
+		//generateNameGrid(peopleGrid);
 		
 		//display
-		getContentPane().add(text);
+		getContentPane().add(top);
 		getContentPane().add(peopleGrid);
 		
-		setVisible(true);
+			try {
+	            Thread.sleep(1000);
+	        } catch (InterruptedException ie){}
+			
+		showText = "Put down your head.";
+		textDisplay.setText(showText);
+		
+		try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ie){}
+		
+		showText = "testeroo";
+		textDisplay.setText(showText);
+
+		//read 'put heads down' and pause
+
+		for (Player p: g.getPlayers())
+		{
+			readText = p.getName() + ", look up.";
+			//read
+			try {
+	            Thread.sleep(1000);
+	        } catch (InterruptedException ie){}
+			
+			showText = p.getName() + ", you are a " + p.getRole() + ".";
+			textDisplay.setText(showText);
+			try {
+	            Thread.sleep(5000);
+	        } catch (InterruptedException ie){}
+			
+			readText = "Put down your head.";
+			
+			showText = "";
+			textDisplay.setText(showText);
+			//read
+			try {
+	            Thread.sleep(1000);
+	        } catch (InterruptedException ie){}
+		}
+		
+		gameLoop();
 	}
-	
+	*/
 	public void gameLoop()
 	{
 		getContentPane().removeAll();
@@ -169,16 +244,21 @@ public class UI extends JFrame
 		
 		JPanel peopleGrid = new JPanel(new GridLayout(0,4));
 		
-		JPanel text = new JPanel(new BorderLayout());
-		text.setBorder(new EmptyBorder(20, 20, 20, 20));
+		JPanel top = new JPanel(new BorderLayout());
+		JLabel textDisplay = new JLabel("Click to learn your role.");
+		textDisplay.setHorizontalAlignment(SwingConstants.CENTER);
+		textDisplay.setFont(new Font("Bodoni 72", Font.PLAIN, 24));
+		textDisplay.setBorder(new EmptyBorder(0, 20, 20, 20));
+		top.add(textDisplay, BorderLayout.CENTER);
 		
 		generateNameGrid(peopleGrid);
 	
 		//display
-		getContentPane().add(text);
+		getContentPane().add(top);
 		getContentPane().add(peopleGrid);
 			
 		setVisible(true);
+		
 	}
 	
 	public void mafiaTurn()
@@ -202,6 +282,8 @@ public class UI extends JFrame
 		for (Player p : g.getPlayers())
 		{
 			JButton playerButton = new JButton(p.getName());
+			playerButton.setFont(new Font("Bodoni 72", Font.PLAIN, 14));
+			playerButton.setEnabled(true);
 			
 			playerButton.addActionListener(new ActionListener()
 			{
@@ -220,6 +302,7 @@ public class UI extends JFrame
 			peopleGrid.add(playerButton);
 		}
 	}
+	
 	
 	public static void main(String[] args)
     {

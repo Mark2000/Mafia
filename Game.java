@@ -29,4 +29,14 @@ public class Game
     {
     	return players;
     }
+    
+    public boolean namesSet()
+    {
+		boolean allSet = true;
+		for (Player p : getPlayers())
+		{
+			allSet = allSet && p.getName() != null;
+		}
+		return allSet;
+    }
 }
