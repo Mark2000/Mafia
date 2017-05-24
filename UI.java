@@ -289,7 +289,17 @@ public class UI extends JFrame
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					System.out.println(p.getName() + " is a " + p.getRole());
+					System.out.println(p.getName() + " is a " + p.getRole() +"...");
+					JFrame charwindow = new JFrame();
+					charwindow.setSize(300, 200);
+					charwindow.setResizable(false);
+					charwindow.setTitle("Character Information");
+					
+					JLabel lblHello = new JLabel(p.getName() + " is a " + p.getRole());
+					lblHello.setFont(new Font("Bodoni 72", Font.PLAIN, 24));
+					lblHello.setHorizontalAlignment(SwingConstants.CENTER);
+					charwindow.getContentPane().add(lblHello, BorderLayout.CENTER);
+					charwindow.setVisible(true);
 				}
 			
 			});
